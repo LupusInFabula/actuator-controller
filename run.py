@@ -5,6 +5,9 @@ import arrow
 import serial
 import yaml
 
+__version__ = '1.0'
+__author__ = 'Francesco Milani'
+
 
 class ActuatorManager:
     conn = None
