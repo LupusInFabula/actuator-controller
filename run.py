@@ -1,5 +1,6 @@
-import os
-import time
+from os.path import join
+from pathlib import Path
+from time import sleep
 
 import arrow
 import serial
@@ -9,28 +10,38 @@ __version__ = '1.0'
 __author__ = 'Francesco Milani'
 
 
-class ActuatorManager:
+class ActuatorPositionSwitcher:
     conn = None
     log_path = None
 
     def __init__(self) -> None:
         try:
             config = self._get_config()
+            self._prepare_log_folder()
             file_name = "actuator_{}.log".format(
                 arrow.now().format(config['DATE_FORMAT'])
             )
-            self.log_path = os.path.join('logs', file_name)
+            self.log_path = join('logs', file_name)
             self.SERIAL_PORT = config['SERIAL_PORT']
             self.CHECK_INTERVAL = config['CHECK_INTERVAL']
             self.DATETIME_FORMAT = config['DATETIME_FORMAT']
             self.COLLECTION_TIME_DEFAULT = config['COLLECTION_TIME_DEFAULT']
             self.CONFIG = config.get('optional', {})
+
         except KeyError as e:
-            print(f'ERROR: Missing required configuration {e} from config.yaml')
-            exit(-1)
+            self._handle_exception(f'ERROR: Missing required configuration {e} from config.yaml')
         except FileNotFoundError:
-            print('ERROR: Cannot find config.yaml')
-            exit(-1)
+            self._handle_exception('ERROR: Cannot find config.yaml')
+
+    @staticmethod
+    def _handle_exception(message):
+        print(message)
+        input('press ENTER to exit')
+        exit(-1)
+
+    @staticmethod
+    def _prepare_log_folder():
+        Path('logs').mkdir(parents=True, exist_ok=True)
 
     @staticmethod
     def _get_config() -> dict:
@@ -39,7 +50,7 @@ class ActuatorManager:
 
     def _wait_until(self, end: arrow.arrow) -> None:
         while arrow.now() < end:
-            time.sleep(self.CHECK_INTERVAL)
+            sleep(self.CHECK_INTERVAL)
 
     def _log_message(self, message: str) -> None:
         with open(self.log_path, 'a') as f:
@@ -59,7 +70,7 @@ class ActuatorManager:
 
     def _set_position(self, pos: int) -> None:
         conn = self._get_conn()
-        conn.write(f'GO{pos}\r\n')
+        conn.write(f'GO{pos}\r\n'.encode('utf-8'))
 
     def _get_wait_and_wait_delta(self, pos: int, now: arrow.arrow):
         shift = self.CONFIG.get(
@@ -105,4 +116,4 @@ class ActuatorManager:
 
 
 if __name__ == '__main__':
-    ActuatorManager().run()
+    ActuatorPositionSwitcher().run()
