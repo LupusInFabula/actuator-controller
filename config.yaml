@@ -1,5 +1,8 @@
-DATETIME_FORMAT: 'YYYY-MM-DD HH:mm:ss'
-DATE_FORMAT: 'YYYY-MM-DD'
+# log file date format
+DATE_FORMAT: 'YYYY_MMM_DD'
+
+# log messages timestamp format
+DATETIME_FORMAT: 'YYYY-MMM-DD HH:mm:ss'
 
 # CHECK_INTERVAL must be a fraction of COLLECTION_TIME
 CHECK_INTERVAL: 60  # seconds
@@ -7,5 +10,5 @@ CHECK_INTERVAL: 60  # seconds
 # default collection time
 COLLECTION_TIME_DEFAULT: 180  # minutes
 
-# collection time for specific position can be set using the format COLLECTION_TIME_POS_N
+# collection time for a specific position can be set using the format COLLECTION_TIME_POS_N
 COLLECTION_TIME_POS_1: 60  # minutes
