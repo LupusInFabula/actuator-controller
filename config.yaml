@@ -1,0 +1,11 @@
+DATETIME_FORMAT: 'YYYY-MM-DD HH:mm:ss'
+DATE_FORMAT: 'YYYY-MM-DD'
+
+# CHECK_INTERVAL must be a fraction of COLLECTION_TIME
+CHECK_INTERVAL: 60  # seconds
+
+# default collection time
+COLLECTION_TIME_DEFAULT: 180  # minutes
+
+# collection time for specific position can be set using the format COLLECTION_TIME_POS_N
+COLLECTION_TIME_POS_1: 60  # minutes
