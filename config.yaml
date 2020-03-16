@@ -1,4 +1,4 @@
-# --------- Mandatory configurations --------- #
+# --------- Mandatory Configurations --------- #
 SERIAL_PORT: 'COM3'
 
 # log file name date format
@@ -14,7 +14,7 @@ CHECK_INTERVAL: 60  # seconds
 COLLECTION_TIME_DEFAULT: 180  # minutes
 
 
-# --------- Optional Configurations --------- #
+# ---------- Optional Configurations --------- #
 optional:
   # NB: any optional config must be indented by 2 spaces.
   # collection time for a specific position can be set using the format COLLECTION_TIME_POS_N
