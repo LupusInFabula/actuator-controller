@@ -100,6 +100,7 @@ class ActuatorManager:
             message = 'Exiting: ' + arrow.now().format(self.DATETIME_FORMAT)
             print(message)
             self._log_message(message)
+            exit(0)
 
 
 if __name__ == '__main__':
