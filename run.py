@@ -73,7 +73,7 @@ class ActuatorManager:
     def _change_position_and_wait(self) -> None:
         for pos in range(1, 11):
             now = arrow.now()
-            # self._set_position(pos)
+            self._set_position(pos)
             wait, wait_delta = self._get_wait_and_wait_delta(pos, now)
 
             message = "- {0}: set position: {1} | collection time: {2}".format(
