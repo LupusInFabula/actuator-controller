@@ -20,10 +20,11 @@ class ActuatorManager:
                 arrow.now().format(config['DATE_FORMAT'])
             )
             self.log_path = os.path.join('logs', file_name)
+            self.SERIAL_PORT = config['SERIAL_PORT']
             self.CHECK_INTERVAL = config['CHECK_INTERVAL']
             self.DATETIME_FORMAT = config['DATETIME_FORMAT']
             self.COLLECTION_TIME_DEFAULT = config['COLLECTION_TIME_DEFAULT']
-            self.CONFIG = config
+            self.CONFIG = config.get('optional', {})
         except KeyError as e:
             print(f'ERROR: Missing required configuration {e} from config.yaml')
             exit(-1)
@@ -47,7 +48,7 @@ class ActuatorManager:
     def _get_conn(self) -> serial.Serial:
         if not (self.conn and self.conn.isOpen()):
             self.conn = serial.Serial(
-                port='COM3',
+                port=self.SERIAL_PORT,
                 baudrate=9600,
                 parity=serial.PARITY_NONE,
                 stopbits=serial.STOPBITS_ONE,

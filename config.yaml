@@ -1,4 +1,7 @@
-# log file date format
+# --------- Mandatory configurations --------- #
+SERIAL_PORT: 'COM3'
+
+# log file name date format
 DATE_FORMAT: 'YYYY_MMM_DD'
 
 # log messages timestamp format
@@ -10,5 +13,8 @@ CHECK_INTERVAL: 60  # seconds
 # default collection time
 COLLECTION_TIME_DEFAULT: 180  # minutes
 
-# collection time for a specific position can be set using the format COLLECTION_TIME_POS_N
-COLLECTION_TIME_POS_1: 60  # minutes
+
+# --------- Optional Configurations --------- #
+optional:
+  # collection time for a specific position can be set using the format COLLECTION_TIME_POS_N
+  COLLECTION_TIME_POS_1: 60  # minutes
