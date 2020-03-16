@@ -16,5 +16,6 @@ COLLECTION_TIME_DEFAULT: 180  # minutes
 
 # --------- Optional Configurations --------- #
 optional:
+  # NB: any optional config must be indented by 2 spaces.
   # collection time for a specific position can be set using the format COLLECTION_TIME_POS_N
   COLLECTION_TIME_POS_1: 60  # minutes

@@ -88,6 +88,7 @@ class ActuatorManager:
     def run(self) -> None:
         try:
             message = 'Starting: ' + arrow.now().format(self.DATETIME_FORMAT)
+            print('Press CTRL+C to safely halt the script.\n')
             print(message)
             self._log_message(message)
             while True:
@@ -99,6 +100,7 @@ class ActuatorManager:
             message = 'Exiting: ' + arrow.now().format(self.DATETIME_FORMAT)
             print(message)
             self._log_message(message)
+            input('\nScript halted. Press ENTER to exit.')
             exit(0)
 
 
