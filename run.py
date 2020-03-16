@@ -1,14 +1,9 @@
 import os
-import signal
 import time
 
 import arrow
 import serial
 import yaml
-
-
-def exit_loop(signum, frame):
-    raise KeyboardInterrupt
 
 
 class ActuatorManager:
@@ -94,7 +89,7 @@ class ActuatorManager:
             while True:
                 self._change_position_and_wait()
 
-        except KeyboardInterrupt:
+        except (KeyboardInterrupt, SystemExit):
             if self.conn and self.conn.isOpen():
                 self.conn.close()
             message = 'Exiting: ' + arrow.now().format(self.DATETIME_FORMAT)
@@ -104,5 +99,4 @@ class ActuatorManager:
 
 
 if __name__ == '__main__':
-    signal.signal(signal.SIGINT, exit_loop)
     ActuatorManager().run()
