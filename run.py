@@ -114,6 +114,7 @@ class ActuatorPositionSwitcher:
                     break
 
                 self._change_position_and_wait(cycle)
+                cycle += 1
 
         except (KeyboardInterrupt, SystemExit):
             if self.conn and self.conn.isOpen():
