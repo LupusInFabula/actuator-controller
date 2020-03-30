@@ -6,7 +6,7 @@ import arrow
 import serial
 import yaml
 
-__version__ = '1.0'
+__version__ = '1.1'
 __author__ = 'Francesco Milani'
 
 
@@ -26,6 +26,8 @@ class ActuatorPositionSwitcher:
             self.CHECK_INTERVAL = config['CHECK_INTERVAL']
             self.DATETIME_FORMAT = config['DATETIME_FORMAT']
             self.COLLECTION_TIME_DEFAULT = config['COLLECTION_TIME_DEFAULT']
+            self.NUMBER_OF_CYCLES = config['NUMBER_OF_CYCLES']
+            self.CUSTOM_CYCLES = config['CUSTOM_CYCLES']
             self.CONFIG = config.get('optional', {})
 
         except KeyError as e:
@@ -72,19 +74,23 @@ class ActuatorPositionSwitcher:
         conn = self._get_conn()
         conn.write(f'GO{pos}\r\n'.encode('utf-8'))
 
-    def _get_wait_and_wait_delta(self, pos: int, now: arrow.arrow):
-        shift = self.CONFIG.get(
-            f'COLLECTION_TIME_POS_{pos}',
-            self.COLLECTION_TIME_DEFAULT
-        )
+    def _get_wait_and_wait_delta(self, pos: int, now: arrow.arrow, cycle: int):
+        if cycle in self.CUSTOM_CYCLES or self.CUSTOM_CYCLES == 'all':
+            shift = self.CONFIG.get(
+                f'COLLECTION_TIME_POS_{pos}',
+                self.COLLECTION_TIME_DEFAULT
+            )
+        else:
+            shift = self.COLLECTION_TIME_DEFAULT
+
         wait = now.shift(minutes=+shift)
         return wait, wait - now
 
-    def _change_position_and_wait(self) -> None:
+    def _change_position_and_wait(self, cycle: int) -> None:
         for pos in range(1, 11):
             now = arrow.now()
             self._set_position(pos)
-            wait, wait_delta = self._get_wait_and_wait_delta(pos, now)
+            wait, wait_delta = self._get_wait_and_wait_delta(pos, now, cycle)
 
             message = "- {0}: set position: {1} | collection time: {2}".format(
                 now.format(self.DATETIME_FORMAT),
@@ -102,8 +108,12 @@ class ActuatorPositionSwitcher:
             print('Press CTRL+C to safely halt the script.\n')
             print(message)
             self._log_message(message)
+            cycle = 1
             while True:
-                self._change_position_and_wait()
+                if self.NUMBER_OF_CYCLES and cycle > self.NUMBER_OF_CYCLES:
+                    break
+
+                self._change_position_and_wait(cycle)
 
         except (KeyboardInterrupt, SystemExit):
             if self.conn and self.conn.isOpen():

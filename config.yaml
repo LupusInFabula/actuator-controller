@@ -13,6 +13,13 @@ CHECK_INTERVAL: 60  # seconds
 # default collection time
 COLLECTION_TIME_DEFAULT: 180  # minutes
 
+# number of full cycles to execute
+NUMBER_OF_CYCLES: 3
+
+# cycles where to apply custom collection times: list or cycle numbers or "all"
+CUSTOM_CYCLES:
+  - 1
+
 
 # ---------- Optional Configurations --------- #
 optional:
