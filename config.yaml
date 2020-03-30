@@ -16,7 +16,7 @@ COLLECTION_TIME_DEFAULT: 180  # minutes
 # number of full cycles to execute
 NUMBER_OF_CYCLES: 3
 
-# cycles where to apply custom collection times: list or cycle numbers or "all"
+# cycles where to apply custom collection times. values: list of integers or "all"
 CUSTOM_CYCLES:
   - 1
 
