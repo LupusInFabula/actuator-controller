@@ -16,13 +16,18 @@ COLLECTION_TIME_DEFAULT: 180  # minutes
 # number of full cycles to execute
 NUMBER_OF_CYCLES: 3
 
-# cycles where to apply custom collection times. values: list of integers or "all"
-CUSTOM_CYCLES:
-  - 1
-
+# first cycle will start from this position
+STARTING_POSITION: 1
 
 # ---------- Optional Configurations --------- #
+# NB: any optional config must be indented by 2 spaces.
 optional:
-  # NB: any optional config must be indented by 2 spaces.
-  # collection time for a specific position can be set using the format COLLECTION_TIME_POS_N
-  COLLECTION_TIME_POS_1: 60  # minutes
+  # Collection time for all cycles
+  CYCLE_ALL:
+    # collection time for a specific position can be set using the format COLLECTION_TIME_POS_N
+    COLLECTION_TIME_POS_1: 120 # minutes
+
+  # Collection time for specific cycles can be set using the format CYCLE_N
+  CYCLE_1:
+    # collection time for a specific position can be set using the format COLLECTION_TIME_POS_N
+    COLLECTION_TIME_POS_1: 60  # minutes

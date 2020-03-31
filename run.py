@@ -27,7 +27,7 @@ class ActuatorPositionSwitcher:
             self.DATETIME_FORMAT = config['DATETIME_FORMAT']
             self.COLLECTION_TIME_DEFAULT = config['COLLECTION_TIME_DEFAULT']
             self.NUMBER_OF_CYCLES = config['NUMBER_OF_CYCLES']
-            self.CUSTOM_CYCLES = config['CUSTOM_CYCLES']
+            self.STARTING_POSITION = config['STARTING_POSITION']
             self.CONFIG = config.get('optional', {})
 
         except KeyError as e:
@@ -75,19 +75,20 @@ class ActuatorPositionSwitcher:
         conn.write(f'GO{pos}\r\n'.encode('utf-8'))
 
     def _get_wait_and_wait_delta(self, pos: int, now: arrow.arrow, cycle: int):
-        if cycle in self.CUSTOM_CYCLES or self.CUSTOM_CYCLES == 'all':
-            shift = self.CONFIG.get(
-                f'COLLECTION_TIME_POS_{pos}',
-                self.COLLECTION_TIME_DEFAULT
-            )
-        else:
-            shift = self.COLLECTION_TIME_DEFAULT
+        key = f'CYCLE_{cycle}' if f'CYCLE_{cycle}' in self.CONFIG else 'CYCLE_ALL'
+        cycle_config = self.CONFIG.get(key, {})
+
+        shift = cycle_config.get(
+            f'COLLECTION_TIME_POS_{pos}',
+            self.COLLECTION_TIME_DEFAULT
+        )
 
         wait = now.shift(minutes=+shift)
         return wait, wait - now
 
     def _change_position_and_wait(self, cycle: int) -> None:
-        for pos in range(1, 11):
+        start = self.STARTING_POSITION if cycle == 1 else 1
+        for pos in range(start, 11):
             now = arrow.now()
             self._set_position(pos)
             wait, wait_delta = self._get_wait_and_wait_delta(pos, now, cycle)
